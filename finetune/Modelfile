@@ -1,0 +1,6 @@
+# 指定基礎模型，請確保您已在 Ollama 中下載過此模型 (e.g., ollama pull llama2)
+FROM llama2
+
+# 指定我們訓練好的 Adapter 權重所在的路徑
+# 路徑是相對於此 Modelfile 的位置
+ADAPTER ./finetuned_adapter
