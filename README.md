@@ -1,6 +1,7 @@
 # 本地端 LLM 應用程式範例 (LangChain + Ollama)
 
 這個專案包含了一系列使用 LangChain 和 Ollama 在本地端運行大型語言模型的 Python 範例。
+本專案為利用gemini cli進行vibe coding，使用prompt進行程式架構生成、除錯與推送並由作者監控其是否合理
 
 ---
 
