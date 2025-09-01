@@ -9,18 +9,18 @@
 ```
 .
 ├── assets
-│   ├── finetune_diagram.svg  (微調流程示意圖)
-│   └── rag_diagram.svg         (RAG 流程示意圖)
+│   ├── finetune_diagram.svg
+│   └── rag_diagram.svg
 ├── finetune
-│   ├── dataset.jsonl           (微調用的資料集)
-│   ├── finetune.py             (執行微調的腳本)
-│   ├── Modelfile               (將微調模型匯入 Ollama 的設定檔)
-│   └── test_finetune_example.py(測試微調後模型的腳本)
+│   ├── ... (微調相關檔案)
 ├── rag
-│   ├── my_document.txt         (RAG 所需的外部知識文件)
-│   └── rag_example.py          (RAG 應用主腳本)
-├── langchain_local_llm_example.py (最基本的本地 LLM 應用腳本)
-└── README.md                     (本說明檔案)
+│   ├── source_documents        (RAG 的知識來源文件)
+│   │   ├── SOP-LIQUID-15.txt
+│   │   └── SOP-TABLET-42.txt
+│   ├── rag_example.py          (RAG 應用主腳本)
+│   └── vector_store            (持久化向量儲存資料夾 - 自動生成)
+├── langchain_local_llm_example.py
+└── README.md
 ```
 
 ---
@@ -60,11 +60,19 @@
 python langchain_local_llm_example.py
 ```
 
-### 2. RAG 範例 (互動式問答)
+### 2. RAG 範例 (藥品製造 SOP 問答系統)
 
-這個範例會根據 `rag/my_document.txt` 的內容來回答您的問題。
+這個範例模擬一個產業應用，作為藥廠操作員的輔助工具，能根據 `rag/source_documents` 資料夾中的 SOP 文件內容，回答生產相關問題。
+
+**請注意：** `source_documents` 資料夾內的 SOP 文件內容為 AI 生成的虛構範例，僅用於功能展示，並非真實的工業標準作業程序。
 
 ![RAG Architecture](./assets/rag_diagram.svg)
+
+**特色功能:**
+*   **持久化向量儲存**: 首次執行時會自動建立 `vector_store` 資料夾來存放文件索引，加速後續啟動。
+*   **答案來源追蹤**: 每次回答都會附上參考的 SOP 文件來源，方便使用者驗證資訊。
+
+**執行步驟:**
 
 1.  首先，切換到 RAG 的資料夾：
     ```bash
@@ -74,26 +82,52 @@ python langchain_local_llm_example.py
     ```bash
     python rag_example.py
     ```
+3.  程式啟動後，您可以試著提問，例如：
+    *   `Metformin XR 錠劑的硬度目標是多少?`
+    *   `Amoxicillin 口服懸液的 pH 值應在什麼範圍?`
 
 ### 3. 微調 (Fine-Tuning) 完整流程
 
-這是一個多步驟的流程，旨在建立一個具有獨特風格的自訂模型。
+此流程旨在建立一個具有獨特風格 (例如：海盜語氣) 的自訂模型。
 
 ![Fine-Tuning Process](./assets/finetune_diagram.svg)
 
-1.  首先，切換到微調的資料夾：
-    ```bash
-    cd finetune
-    ```
-2.  **執行微調腳本**：這個步驟需要有 NVIDIA GPU，且會花費一些時間。
-    ```bash
-    python finetune.py
-    ```
-3.  **建立微調模型**：成功執行上一步後，您會得到 `finetuned_adapter` 資料夾。現在使用 `Modelfile` 來建立名為 `pirate-model` 的新模型。
-    ```bash
-    ollama create pirate-model -f ./Modelfile
-    ```
-4.  **測試微調後的模型**：執行測試腳本，與您親手微調的模型互動！
-    ```bash
-    python test_finetune_example.py
-    ```
+(執行步驟與原版相同...)
+
+---
+
+## 處理模型的不可靠性：幻覺 (Hallucinations)
+
+大型語言模型有時會「產生幻覺」，也就是捏造看似合理但實際上不正確或無從考證的資訊。在專業或關鍵應用中，處理幻覺至關重要。以下是本專案中採用的幾種策略：
+
+### 1. 透過提示工程進行約束 (Prompt Engineering)
+
+最直接的方式，就是透過精確的指令來限制模型的行為。在我們的 RAG 範例中，提示 (Prompt) 明確要求模型：
+
+> "請只根據以下提供的標準作業程序 (SOP) 文件來精確回答問題。如果文件內容無法回答問題，請明確地說「根據現有SOP文件，無法找到相關資訊」。"
+
+這個指令大幅降低了模型在知識範圍外自由發揮的可能性。
+
+### 2. 提供答案來源進行溯源 (Grounding with Citations)
+
+信任來自於驗證。如果模型只給出答案，我們無從得知其依據。新版的 RAG 範例在提供答案的同時，會一併列出它參考了哪些 `source_documents` 中的文件。
+
+這讓使用者可以快速追溯到原始資訊，自行判斷答案的可靠性。這是建立可信賴 AI 系統的關鍵一步。
+
+### 3. 透過微調深化領域知識 (Fine-Tuning)
+
+雖然我們的微調範例是為了好玩的「海盜語氣」，但在產業應用上，微調是讓模型深度學習特定領域知識、術語和溝通風格的強大工具。
+
+一個經過大量內部文件 (如：維修手冊、病例報告、法律條文) 微調的模型，會因為更「熟悉」該領域的知識，而較不容易產生與該領域無關的幻覺。
+
+### 4. 透過使用者反饋進行標註與改進 (Labeling and Improvement via User Feedback)
+
+預防幻覺的機制並非萬無一失。因此，建立一個讓使用者可以輕鬆回報錯誤的機制，是讓系統能「持續進化」的關鍵。這被稱為**人工回饋循環 (Human-in-the-Loop Feedback)**。
+
+在新版的 RAG 範例中，我們加入了一個簡單的標註功能：
+*   在模型回答後，您可以輸入 `flag` 指令。
+*   程式會自動將該次對話的「問題」、「模型的錯誤答案」和「參考的上下文」完整記錄到 `rag/hallucination_log.jsonl` 檔案中。
+
+這個日誌檔案非常有價值，它可以幫助您：
+1.  **分析失敗案例**：了解系統是在哪個環節出錯（是文件檢索不準確，還是模型理解錯誤？）。
+2.  **建立高品質的微調資料集**：這些被標註的「問題-錯誤答案」組合，是未來進行微調、讓模型從錯誤中學習的最佳教材，能有效提升模型在特定領域的準確度。

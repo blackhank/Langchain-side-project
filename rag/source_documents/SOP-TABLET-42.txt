@@ -1,0 +1,43 @@
+文件編號: SOP-TABLET-42
+版本: 3.5
+生效日期: 2023-08-20
+產品名稱: Metformin XR 緩釋錠 500mg (Metformin Extended-Release Tablets)
+
+標題: Metformin XR 500mg 緩釋錠生產標準作業程序
+
+1. 目的
+   本文件旨在提供 Metformin XR 500mg 緩釋錠的詳細生產指南，確保產品質量符合 cGMP 要求。
+
+2. 適用範圍
+   本程序適用於所有參與 Metformin XR 緩釋錠的製粒、壓錠、包衣及包裝階段的人員。
+
+3. 原料清單
+   - Metformin Hydrochloride (鹽酸二甲雙胍)
+   - Hypromellose (HPMC, 羥丙甲纖維素)
+   - Magnesium Stearate (硬脂酸鎂)
+   - Opadry II (歐巴代薄膜衣)
+   - Purified Water (純化水)
+
+4. 生產步驟
+   4.1. 濕式製粒:
+       - 將 Metformin Hydrochloride 與 Hypromellose 投入流化床乾燥機 (FBD-301) 中進行預混合 10 分鐘。
+       - 使用純化水作為黏合劑進行噴霧製粒。
+       - 製粒完成後，在 60°C 下進行乾燥，直至水份含量 (LOD) 低於 2.0%。
+   4.2. 總混:
+       - 將乾燥後的顆粒通過整粒機，並轉移至混合桶 (Blender B-501)。
+       - 加入 Magnesium Stearate，以 15 RPM 的速度混合 5 分鐘。
+   4.3. 壓錠:
+       - 使用旋轉式壓錠機 (Press-T-30) 進行壓錠。
+       - 錠劑目標重量: 750mg ± 3%。
+       - 硬度目標: 80-120 N。
+   4.4. 包衣:
+       - 將錠芯投入包衣機 (Coater C-401)。
+       - 配製 Opadry II 懸浮液，並對錠芯進行包衣，目標增重 3%。
+
+5. 品質控制
+   - 溶離度測試 (Dissolution): 必須符合 USP 藥典對 Metformin XR 錠劑的溶離曲線要求。
+   - 外觀檢查: 錠劑表面應光滑，無斑點、無破損。
+   - 含量均一度: 應符合藥典規範。
+
+6. 儲存條件
+   - 儲存在受控的室溫 (20°C - 25°C) 及相對濕度低於 60% 的環境中。

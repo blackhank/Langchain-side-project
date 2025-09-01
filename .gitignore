@@ -1,0 +1,7 @@
+# RAG generated files
+/rag/vector_store/
+/rag/hallucination_log.jsonl
+
+# Python cache
+__pycache__/
+*.pyc
